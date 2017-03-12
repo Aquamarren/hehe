@@ -1,7 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical" android:layout_width="match_parent"
     android:layout_height="match_parent">
+
+    <ImageView
+        android:layout_width="212dp"
+        android:layout_height="wrap_content"
+        android:id="@+id/imageView"
+        android:layout_gravity="center_horizontal"
+        android:layout_weight="0.62"
+        android:layout_alignBottom="@+id/editTextGoalName"
+        android:layout_alignEnd="@+id/btnSaveGoal"
+        android:layout_marginBottom="104dp"
+        android:layout_alignParentTop="true" />
 
     <EditText
         android:layout_width="match_parent"
@@ -9,19 +20,36 @@
         android:id="@+id/editTextGoalName"
         android:hint="Goal Name"
         android:layout_gravity="center_horizontal"
-        android:background="#f2f0f0" />
+        android:background="#f2f0f0"
+        android:layout_marginTop="202dp"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentStart="true" />
 
     <EditText
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:id="@+id/editTextGoalCost"
         android:hint="Goal Cost"
-        android:layout_gravity="center_horizontal" />
+        android:layout_gravity="center_horizontal"
+        android:layout_below="@+id/editTextGoalName"
+        android:layout_alignParentStart="true" />
 
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="CHECK"
         android:id="@+id/btnSaveGoal"
-        android:layout_gravity="center_horizontal" />
-</LinearLayout>
+        android:layout_gravity="center_horizontal"
+        android:layout_below="@+id/editTextGoalCost"
+        android:layout_centerHorizontal="true" />
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Add Image"
+        android:id="@+id/button"
+        android:layout_marginTop="50dp"
+        android:layout_below="@+id/btnSaveGoal"
+        android:layout_centerHorizontal="true" />
+
+</RelativeLayout>

@@ -2,6 +2,7 @@ package com.example.marrenmatias.trynavdrawer;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
@@ -23,7 +24,7 @@ public class UpdateBudget extends Activity {
     private Button btnSaveBudgetAmount;
     private TextView budgetCategoryName;
     float budgetAmount;
-
+    float expenseAmount;
 
 
     @Override
@@ -53,18 +54,15 @@ public class UpdateBudget extends Activity {
     }
 
     private void SaveBudget() {
-        //float budgetAmount = Float.valueOf(editTextBudgetCategoryAmount.getText().toString());
         Bundle bundle = getIntent().getExtras();
         String categoryID = bundle.getString("categoryBudgetID");
-        Toast.makeText(UpdateBudget.this, categoryID, Toast.LENGTH_LONG).show();
-
 
         Cursor cur = db.rawQuery("SELECT count(*),* FROM CATEGORY WHERE ID = " + categoryID, null);
         cur.moveToFirst();
         String catName = cur.getString(cur.getColumnIndex("CategoryName"));
+        expenseAmount = cur.getFloat(cur.getColumnIndex("Budget"));
         float catAmount = cur.getFloat(cur.getColumnIndex("Budget"));
-        //cur.getString(cur.getColumnIndexOrThrow("_id"));
-        //Toast.makeText(UpdateBudget.this,, Toast.LENGTH_LONG).show();
+
         int count = cur.getInt(0);
         if(count > 0) {
             budgetCategoryName.setText(catName);
@@ -77,17 +75,29 @@ public class UpdateBudget extends Activity {
                     Cursor cursor = db.rawQuery("SELECT IncomeAmount FROM INCOME WHERE ACTIVE = 1", null);
                     cursor.moveToFirst();
                     float incomeAmount = Float.valueOf(cursor.getString(0));
+
                     if (budgetAmount > incomeAmount) {
                         Toast.makeText(UpdateBudget.this, "Income not enough", Toast.LENGTH_SHORT).show();
                     } else {
                         Bundle bundle = getIntent().getExtras();
                         String categoryIDd = bundle.getString("categoryBudgetID");
 
-                        mydb.updateBudget(editTextBudgetCategoryAmount.getText().toString(),categoryIDd);
-                        mydb.calculateIncome(Float.valueOf(editTextBudgetCategoryAmount.getText().toString()));
-                        Log.i("insert", "Data Inserted");
+                        if(budgetAmount >= expenseAmount){
+                            float getDifference = budgetAmount - expenseAmount;
+                            mydb.updateBudget(editTextBudgetCategoryAmount.getText().toString(),categoryIDd);
+                            mydb.calculateIncome(getDifference);
+                            Log.i("insert", "Data Inserted");
+                        }else if(expenseAmount > budgetAmount){
+                            float add = budgetAmount - expenseAmount;
+                            mydb.updateBudget(editTextBudgetCategoryAmount.getText().toString(),categoryIDd);
+                            mydb.calculateIncome(add);
+                            Log.i("insert", "Data Inserted");
+                        }
 
-                        Toast.makeText(UpdateBudget.this,"BudgetInserted " + editTextBudgetCategoryAmount.getText().toString() + categoryIDd, Toast.LENGTH_LONG).show();
+                        Intent intent = new Intent(UpdateBudget.this,MainActivity.class);
+                        String frags = "ViewBudget";
+                        intent.putExtra("to", frags);
+                        startActivity(intent);
                     }
                 }
             });

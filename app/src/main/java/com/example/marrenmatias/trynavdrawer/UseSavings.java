@@ -8,13 +8,13 @@ import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
-import android.widget.AdapterView;
-import android.widget.Button;
-import android.widget.EditText;
-import android.widget.Toast;
-import android.widget.Spinner;
 import android.view.View.OnClickListener;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.Spinner;
+import android.widget.Toast;
+
 import java.util.ArrayList;
 import java.util.List;
 /**
@@ -43,29 +43,21 @@ public class UseSavings extends AppCompatActivity {
         spinner = (Spinner)findViewById(R.id.spinner);
         List<String> list = new ArrayList<String>();
         list.add("Income");
-        c = db.rawQuery("SELECT GoalRank, GoalCost FROM GOALS WHERE GoalAccomplished = 1 AND GoalName IS NOT NULL ORDER BY GoalRank ASC",null);
+        c = db.rawQuery("SELECT GoalRank, GoalCost, GoalName FROM GOALS WHERE GoalAccomplished = 1 AND GoalName IS NOT NULL " +
+                "AND MAX(GoalRank) ORDER BY GoalRank ASC",null);
 
         while(c.moveToNext()){
-            list.add("Goal " + c.getString(0));
+            list.add("Goal " + c.getString(0) + " - " + c.getString(2));
             cost = Float.valueOf(c.getString(1));
         }
         ArrayAdapter<String> dataAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item,list);
         dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinner.setAdapter(dataAdapter);
 
-        // Spinner item selection Listener
-        // addListenerOnSpinnerItemSelection();
-
         useSavingsMethod();
         goalAccomplished();
     }
 
-    //GET THE CHOICE IN SPINNER
-    /*
-    public void addListenerOnSpinnerItemSelection(){
-
-        spinner.setOnItemSelectedListener(new CustomOnItemSelectedListener());
-    }*/
 
     private void useSavingsMethod() {
         buttonSubmitUseSavings.setOnClickListener(new OnClickListener() {
@@ -94,7 +86,7 @@ public class UseSavings extends AppCompatActivity {
                     } else {
                         if (position == 0) {
                             mydb.useSavingsAddIncome(editTextUseSavingsAmount.getText().toString());
-                            mydb.AddIncome(editTextUseSavingsAmount.getText().toString());
+                            mydb.AddIncome(Float.valueOf(editTextUseSavingsAmount.getText().toString()));
                             Toast.makeText(UseSavings.this, "Savings added to Income", Toast.LENGTH_SHORT).show();
 
                             Intent intent = new Intent(UseSavings.this, UseSavings.class);
@@ -122,6 +114,7 @@ public class UseSavings extends AppCompatActivity {
     public void goalAccomplished(){
         Cursor cursor = db.rawQuery("SELECT * FROM GOALS WHERE GoalAccomplished = 1 AND MoneySaved = GoalCost", null);
         while(cursor.moveToNext()){
+            String goalName_ = cursor.getString(1);
             String goalCost = cursor.getString(2);
             int goalRank = Integer.valueOf(cursor.getString(4));
             float goalPoints = Math.round(goalRank / 5);
@@ -129,9 +122,9 @@ public class UseSavings extends AppCompatActivity {
             if (Float.valueOf(goalCost) == moneySaved) {
                 String SQL2 = "UPDATE GOALS SET GoalAccomplished = 0, GoalPoints = " + goalPoints + " WHERE GoalRank = "+ goalRank;
                 db.execSQL(SQL2);
-                String SQL3 = "INSERT INTO GOALS (GoalRank, GoalAccomplished, MoneySaved) VALUES (" + goalRank + ", 1, 0)";
+                String SQL3 = "INSERT INTO GOALS (GoalRank, GoalAccomplished, MoneySaved) VALUES (" + goalRank + ", 2, 0)";
                 db.execSQL(SQL3);
-                Toast.makeText(UseSavings.this, "Congratulations! Goal " + goalRank + " Accomplished!", Toast.LENGTH_SHORT).show();
+                Toast.makeText(UseSavings.this, "Congratulations! Goal " + goalRank + " Accomplished! Enjoy your "+ goalName_ + "!", Toast.LENGTH_SHORT).show();
             }
         }
 

@@ -25,5 +25,6 @@
         android:text="FORECAST"
         android:id="@+id/btnForecastExp"
         android:layout_alignBottom="@+id/listViewCategoryWithExpense"
-        android:layout_alignParentEnd="true" />
+        android:layout_alignParentEnd="true"
+        android:layout_gravity="right|top" />
 </FrameLayout>

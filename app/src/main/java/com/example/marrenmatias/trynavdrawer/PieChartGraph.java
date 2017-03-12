@@ -1,11 +1,14 @@
 package com.example.marrenmatias.trynavdrawer;
 
 import android.content.Context;
+import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.view.View;
+import android.widget.Button;
 import android.widget.RelativeLayout;
 
 import com.github.mikephil.charting.charts.PieChart;
@@ -24,6 +27,9 @@ public class PieChartGraph extends AppCompatActivity {
     DatabaseHelper mydb;
     private RelativeLayout mainLayout;
     private PieChart mChart;
+    private Button btnBarGraph;
+    private Button btnForecastPage;
+    private Button btnPieChart;
 
 
     @Override
@@ -34,6 +40,9 @@ public class PieChartGraph extends AppCompatActivity {
 
 
         mainLayout = (RelativeLayout)findViewById(R.id.mainLayout);
+        btnBarGraph = (Button)findViewById(R.id.btnBarGraph);
+        btnForecastPage = (Button)findViewById(R.id.btnForecastPage);
+        btnPieChart = (Button)findViewById(R.id.btnPieChart);
         mChart = new PieChart(this);
         mainLayout.addView(mChart,500,1500);
 
@@ -56,10 +65,38 @@ public class PieChartGraph extends AppCompatActivity {
         l.setPosition(LegendPosition.BELOW_CHART_CENTER);
         l.setXEntrySpace(17);
         l.setYEntrySpace(15);
+
+        Buttons();
     }
 
     protected void openDatabase() {
         db = openOrCreateDatabase("THRIFTY.db", Context.MODE_PRIVATE, null);
+    }
+
+    public  void Buttons(){
+        btnBarGraph.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(PieChartGraph.this, BarChartGraph.class);
+                startActivity(intent);
+            }
+        });
+
+        btnForecastPage.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(PieChartGraph.this, ForecastBudgetWeek.class);
+                startActivity(intent);
+            }
+        });
+
+        btnPieChart.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(PieChartGraph.this, PieChartGraph.class);
+                startActivity(intent);
+            }
+        });
     }
 
     private void setCategoriesPieChart() {

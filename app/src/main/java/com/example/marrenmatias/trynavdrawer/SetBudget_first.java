@@ -2,26 +2,26 @@ package com.example.marrenmatias.trynavdrawer;
 
 
         import android.content.Context;
-        import android.content.Intent;
-        import android.database.Cursor;
-        import android.database.sqlite.SQLiteDatabase;
-        import android.os.Bundle;
-        import android.support.v7.app.AppCompatActivity;
-        import android.util.Log;
-        import android.view.View;
-        import android.widget.Button;
-        import android.widget.ListView;
-        import android.widget.SimpleCursorAdapter;
-        import android.widget.TextView;
-        import android.widget.AdapterView;
+import android.content.Intent;
+import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
+import android.graphics.Typeface;
+import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
+import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ImageButton;
+import android.widget.ListView;
+import android.widget.SimpleCursorAdapter;
+import android.widget.TextView;
 
 
 public class SetBudget_first extends AppCompatActivity {
     SQLiteDatabase db;
     DatabaseHelper mydb;
-    Button btnCheck;
-    TextView txtTotalBudget;
-    Button btnAddCategory;
+    ImageButton btnCheck;
+    TextView txtTotalBudget,sb;
+    ImageButton btnAddCategory;
     Cursor c;
     SimpleCursorAdapter adapter;
     Cursor data;
@@ -38,10 +38,15 @@ public class SetBudget_first extends AppCompatActivity {
         mydb = new DatabaseHelper(this);
 
 
-        btnCheck = (Button) findViewById(R.id.btnSubmit);
-        btnAddCategory = (Button)findViewById(R.id.btnInsertCategory);
+        btnCheck = (ImageButton) findViewById(R.id.btnSubmit);
+        btnAddCategory = (ImageButton)findViewById(R.id.btnInsertCategory);
         txtTotalBudget = (TextView)findViewById(R.id.txtViewTotalBudget);
+        sb = (TextView) findViewById(R.id.setBudget);
         listViewFirstCategory = (ListView)findViewById(R.id.listViewFirstCategory);
+
+        Typeface myCustomFont = Typeface.createFromAsset(getAssets(), "fonts/BebasNeue.otf");
+        sb.setTypeface(myCustomFont);
+        txtTotalBudget.setTypeface(myCustomFont);
 
         c = db.rawQuery(SELECT_SQL, null);
         c.moveToFirst();
@@ -77,12 +82,9 @@ public class SetBudget_first extends AppCompatActivity {
                 data.moveToPosition(position);
                 String rowId = data.getString(data.getColumnIndexOrThrow("_id"));
 
-                Intent intent = new Intent(SetBudget_first.this, UpdateBudget.class);
+                Intent intent = new Intent(SetBudget_first.this, UpdateBudget_first.class);
                 intent.putExtra("categoryBudgetID", rowId);
                 startActivity(intent);
-
-                Intent intent1 = new Intent(SetBudget_first.this, SetBudget_first.class);
-                startActivity(intent1);
             }
         });
     }
@@ -91,7 +93,7 @@ public class SetBudget_first extends AppCompatActivity {
         btnAddCategory.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(SetBudget_first.this,AddCategory.class));
+                startActivity(new Intent(SetBudget_first.this,IconCateg.class));
             }
         });
     }
@@ -100,7 +102,9 @@ public class SetBudget_first extends AppCompatActivity {
         btnCheck.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(SetBudget_first.this,ViewExpense.class);
+                Intent intent = new Intent(SetBudget_first.this,MainActivity.class);
+                String frags = "ViewExpense";
+                intent.putExtra("to",frags);
                 startActivity(intent);
             }
         });

@@ -79,7 +79,7 @@
         android:text="10,000.00"
         android:textSize="42sp"
         android:textColor="#5f5f5f"
-        android:layout_below="@+id/Income"
+        android:layout_centerVertical="true"
         android:layout_alignParentStart="true" />
 
 

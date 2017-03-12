@@ -14,6 +14,7 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListAdapter;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 
@@ -29,9 +30,7 @@ public class ViewGoalsPage extends Fragment {
     Cursor detail;
 
     public ViewGoalsPage() {
-        // Required empty public constructor
     }
-
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -46,14 +45,13 @@ public class ViewGoalsPage extends Fragment {
     }
 
     protected void openDatabase() {
-        //db = openOrCreateDatabase("THRIFTY.db", Context.MODE_PRIVATE, null);
         db = getActivity().openOrCreateDatabase("THRIFTY.db",android.content.Context.MODE_PRIVATE,null); //RIGHT
     }
 
     public void showGoalsList(){
         final ArrayList<String> theList = new ArrayList<>();
 
-        data = db.rawQuery("SELECT GoalRank FROM GOALS WHERE GoalAccomplished = 1 ORDER BY GoalRank ASC",null);
+        data = db.rawQuery("SELECT GoalRank FROM GOALS WHERE GoalAccomplished = 1 AND GoalAccomplished = 2 ORDER BY GoalRank ASC",null);
         while(data.moveToNext()) {
             theList.add(data.getString(0));
             ListAdapter listAdapter = new ArrayAdapter<>(getActivity(), android.R.layout.simple_list_item_1, theList);
@@ -62,21 +60,23 @@ public class ViewGoalsPage extends Fragment {
             listViewGoalsList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                 @Override
                 public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                    //int result = (int)parent.getItemIdAtPosition(position);
-                    //String result = (String)parent.getItemAtPosition(position);
                     data.moveToPosition(position);
                     String result = data.getString(data.getColumnIndex("GoalRank"));
-                    detail = db.rawQuery("SELECT * FROM GOALS WHERE GoalAccomplished = 1 AND GoalRank = " + result, null);
+                    detail = db.rawQuery("SELECT * FROM GOALS WHERE GoalAccomplished = 1 AND GoalAccomplished = 2 AND GoalRank = " + result, null);
                     detail.moveToFirst();
-                    final String goalName = detail.getString(1);
-                    if(goalName == null){
+                    final String goalName = detail.getString(detail.getColumnIndex("GoalName"));
+                    String goalAccomplished = detail.getString(detail.getColumnIndex("GoalAccomplished"));
+
+                    if(goalName == null && goalAccomplished == "1"){
                         Intent intent = new Intent(getActivity(), AddGoal.class);
                         intent.putExtra("goalRank", result);
                         startActivity(intent);
-                    }else{
+                    }else if(goalName != null && goalAccomplished == "1"){
                         Intent intent2 = new Intent(getActivity(), GoalDetails.class);
                         intent2.putExtra("goalRank",result);
                         startActivity(intent2);
+                    }else if(goalAccomplished == "2"){
+                        Toast.makeText(getActivity(), "Cannot Add Goal!", Toast.LENGTH_SHORT).show();
                     }
                 }
             });

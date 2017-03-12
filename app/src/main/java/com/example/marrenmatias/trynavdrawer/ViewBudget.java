@@ -1,22 +1,19 @@
 package com.example.marrenmatias.trynavdrawer;
 
 
-import android.content.Context;
+import android.content.Intent;
+import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-
-import android.database.Cursor;
-import android.database.sqlite.SQLiteDatabase;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.SimpleCursorAdapter;
-import android.widget.Toast;
-import android.content.Intent;
 
 
 /**
@@ -75,21 +72,17 @@ public class ViewBudget extends Fragment {
                 Intent intent = new Intent(getActivity(), UpdateBudget.class);
                 intent.putExtra("categoryBudgetID", rowId);
                 startActivity(intent);
+
             }
         });
-        Intent intent1 = new Intent(getActivity(), ViewBudget.class);
-        startActivity(intent1);
     }
 
     public void UpdateBudget(){
-
         btnCheckBudget.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
                 Intent intent = new Intent(getActivity(), MainActivity.class);
                 startActivity(intent);
-
             }
         });
     }

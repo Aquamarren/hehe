@@ -17,6 +17,7 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.ViewTreeObserver;
+import android.widget.ImageButton;
 import android.widget.TextView;
 
 import java.util.ArrayList;
@@ -24,8 +25,8 @@ import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
-
-        TextView un;
+    ImageButton badge,settings;
+    TextView un;
     /** The total number of menu items in the {@link NavigationView} */
     private static final int MENU_ITEMS = 7;
     //** Contains the {@link MenuItem} views in the {@link NavigationView} */
@@ -92,12 +93,40 @@ public class MainActivity extends AppCompatActivity
             fragmentTransaction.replace(R.id.frame,fragment,"fragment5");
             fragmentTransaction.commit();
         }
+        else if (fragmentName != null && fragmentName.equals("ViewBudget")) {
+            setTitle("Budget");
+            ViewBudget fragment = new ViewBudget();
+            FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
+            fragmentTransaction.replace(R.id.frame,fragment,"fragment2");
+            fragmentTransaction.commit();
+        }
+        else if (fragmentName != null && fragmentName.equals("ViewGoals")) {
+            setTitle("Goals");
+            ViewGoalsPage fragment = new ViewGoalsPage();
+            FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
+            fragmentTransaction.replace(R.id.frame,fragment,"fragment6");
+            fragmentTransaction.commit();
+        }
 
-       /* setTitle("First Frag");
-        AddIncome fragment = new AddIncome();
-        FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
-        fragmentTransaction.replace(R.id.frame, fragment,"fragment1");
-        fragmentTransaction.commit();*/
+
+        badge = (ImageButton) header.findViewById(R.id.badgePage);
+        settings = (ImageButton) header.findViewById(R.id.settingsPage);
+
+        badge.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent i = new Intent(MainActivity.this, ViewBadges.class);
+                startActivity(i);
+            }
+        });
+
+        settings.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent i = new Intent(MainActivity.this, ViewSettings.class);
+                startActivity(i);
+            }
+        });
     }
 
     @Override
@@ -187,7 +216,7 @@ public class MainActivity extends AppCompatActivity
             fragmentTransaction.commit();
 
         }
-          else if (id == R.id.nav7) {
+        else if (id == R.id.nav7) {
 
             setTitle("Community");
             ViewCommunity fragment = new ViewCommunity();

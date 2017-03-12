@@ -8,7 +8,18 @@
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
-    tools:context="com.example.marrenmatias.trynavdrawer.ForecastBudget">
+    android:background="@drawable/bg3"
+    tools:context=".ForecastBudgetWeek">
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:text="Large Text"
+        android:id="@+id/textViewForecastRangeDate"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="50dp" />
 
     <ListView
         android:layout_width="wrap_content"
@@ -24,6 +35,14 @@
         android:text="FORECAST BUDGET"
         android:id="@+id/textView2"
         android:layout_alignParentTop="true"
+        android:layout_alignParentEnd="true" />
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="NEXT MONTH"
+        android:id="@+id/btnForecastNextMonth"
+        android:layout_below="@+id/textView2"
         android:layout_alignParentEnd="true" />
 
 </RelativeLayout>

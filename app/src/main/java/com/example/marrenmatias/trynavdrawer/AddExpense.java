@@ -71,15 +71,15 @@ public class AddExpense extends Activity{
         float budgetCost = Float.valueOf(i.getStringExtra("budgetCost"));
         float budget = Float.valueOf(i.getStringExtra("budget"));
         float difference = Math.abs(budgetCost - budget);
-        textViewExpense_.setText(String.valueOf(difference) + "/" + budgetCost);
+        textViewExpense_.setText(String.format("%.2f",difference) + "/" + String.format("%.2f",budgetCost));
         editTextExpenseName.setText(categoryName);
 
         if(budget < 0) {
             float percentage = (difference/budgetCost) * 100;
-            progressBarExpense.setProgress((int) difference);
+            progressBarExpense.setProgress((int)difference);
             textViewPercentIncrease.setText(String.valueOf(percentage));
         }else{
-            progressBarExpense.setProgress((int) difference);
+            progressBarExpense.setProgress((int)difference);
         }
 
         btnAddExpenses.setOnClickListener(new View.OnClickListener() {
@@ -88,24 +88,22 @@ public class AddExpense extends Activity{
                 Intent i = getIntent();
                 String categoryName = i.getStringExtra("categoryName");
                 String categoryID = i.getStringExtra("categoryID");
-
                 String timestamp = new SimpleDateFormat("yyyy-MM-dd").format(new Date());
+                String expenseName = editTextExpenseName.getText().toString();
 
                 Cursor cursor = db.rawQuery("SELECT count(*) FROM EXPENSE WHERE ExpenseDate = '" + timestamp + "' " +
                         "AND CategoryName = '" + categoryName + "' AND ACTIVE = 1", null);
                 cursor.moveToFirst();
                 int count = cursor.getInt(0);
 
-                String expenseName = editTextExpenseName.getText().toString();
-
-                Cursor curr = db.rawQuery("SELECT count(*),* FROM CATEGORY WHERE ACTIVE = 1 AND CategoryName = '" + expenseName+"'", null);
+                Cursor curr = db.rawQuery("SELECT ID,count(*) FROM CATEGORY WHERE ACTIVE = 1 AND CategoryName = '" + expenseName + "'", null);
                 curr.moveToFirst();
+                String categoryID_ = curr.getString(curr.getColumnIndex("ID"));
                 int count2 = curr.getInt(0);
 
                 if(count > 0){
                     if(count2 > 0) {
-                        String categoryID_ = curr.getString(curr.getColumnIndex("ID"));
-                        if(categoryID_ == categoryID) {
+                        if(categoryID.equals(categoryID_)) {
                             if ((editTextExpenseName.getText().toString()).length() > 0 && (editTextExpenseAmount.getText().toString()).length() > 0) {
                                 mydb.UpdateExpenseName(editTextExpenseName.getText().toString(), categoryName);
                                 mydb.UpdateExpenseAmount(editTextExpenseAmount.getText().toString(), timestamp, categoryName, categoryID);
@@ -140,8 +138,7 @@ public class AddExpense extends Activity{
                     }
                 }else {
                     if(count2 > 0) {
-                        String categoryID_ = curr.getString(curr.getColumnIndex("ID"));
-                        if(categoryID_ == categoryID) {
+                        if(categoryID.equals(categoryID_)) {
                             if ((editTextExpenseName.getText().toString()).length() > 0 && (editTextExpenseAmount.getText().toString()).length() > 0) {
                                 mydb.UpdateExpenseName(editTextExpenseName.getText().toString(), categoryName);
                                 mydb.AddExpense(editTextExpenseAmount.getText().toString(), timestamp, categoryName, categoryID);

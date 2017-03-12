@@ -71,7 +71,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         db.execSQL("CREATE TABLE GOALS (ID INTEGER PRIMARY KEY AUTOINCREMENT, GoalName TEXT, GoalCost FLOAT, GoalDate DATE, " +
                 "GoalRank INTEGER, GoalPoints INTEGER, GoalAccomplished INTEGER, MoneySaved FLOAT)");
 
-        db.execSQL("INSERT INTO GOALS (GoalRank, GoalAccomplished, MoneySaved) VALUES (1,1,0),(2,1,0),(3,1,0),(4,1,0),(5,1,0)");
+        db.execSQL("INSERT INTO GOALS (GoalRank, GoalAccomplished, MoneySaved) VALUES (1,2,0),(2,2,0),(3,2,0),(4,2,0),(5,1,0)");
 
         db.execSQL("INSERT INTO EXPENSE(ExpenseAmount, ExpenseDate, CategoryName, ACTIVE) " +
                 "VALUES (20, '2017-01-30', 'Water', 1), (30, '2017-01-29', 'Electricity', 1)"); //Sample for forecastBudget
@@ -101,7 +101,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         }
     }
 
-    public boolean insertSavings(String Savings, String Timestamp){
+    public boolean insertSavings(Float Savings, String Timestamp){
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues content = new ContentValues();
         content.put(COL_5, Savings);
@@ -119,7 +119,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         String query = "SELECT IncomeAmount FROM Income WHERE ACTIVE = 1";
         Cursor cursor = db.rawQuery(query,null);
         float current = 0;
-        float totalIncome = 0;
+        float totalIncome;
         if(cursor.moveToFirst()){
             current = Float.parseFloat(cursor.getString(0));
         }
@@ -131,11 +131,6 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         db1.execSQL(rawQuery);
     }
 
-    public void insertBudgetOnCategory(String BudgetAmount, String CategoryName){
-        SQLiteDatabase db = this.getWritableDatabase();
-        String SQL = "UPDATE CATEGORY SET Budget =" + BudgetAmount + " WHERE CategoryName = '"+CategoryName+"' AND ACTIVE = 1";
-        db.execSQL(SQL);
-    }
 
     public void AddCategory(String Category, String Check, String DueDate, String DueTime, String IconID){
         SQLiteDatabase db = this. getWritableDatabase();
@@ -144,16 +139,22 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         db.execSQL(SQL);
     }
 
-    public void AddIncome(String Income){
+    public void AddIncome(Float Income){
         SQLiteDatabase db = this.getWritableDatabase();
-        Cursor cursor = db.rawQuery("SELECT IncomeAmount FROM INCOME WHERE ACTIVE = 1",null);
-        float incomeAmount = 0;
-        if(cursor.moveToFirst()){
-            incomeAmount = Float.valueOf(cursor.getString(0));
-        }
-        float totalIncomeAmount = incomeAmount+Float.valueOf(Income);
-        String SQL = "UPDATE Income SET " + COL_2 + "= "+ totalIncomeAmount + " WHERE ACTIVE = 1";
+        String SQL = "UPDATE Income SET " + COL_2 + "= "+ Income + " WHERE ACTIVE = 1";
         db.execSQL(SQL);
+    }
+
+    public void UpdateIncomeAmount(Float Income){
+        SQLiteDatabase db = this.getWritableDatabase();
+        String SQL = "UPDATE Income SET = "+ Income + " WHERE ACTIVE = 1";
+        db.execSQL(SQL);
+    }
+
+    public Cursor Income(){
+        SQLiteDatabase db = this.getWritableDatabase();
+        Cursor cursor = db.rawQuery("SELECT * FROM INCOME WHERE ACTIVE = 1", null);
+        return cursor;
     }
 
     public Cursor getListContentsCategory(){
@@ -218,10 +219,15 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         db.execSQL(SQL);
     }
 
-    public void insertGoal(String Goal, String GoalCost, String GoalDate, String GoalRank){
+    public void insertGoal(String Goal, String GoalCost, String GoalDate, Integer GoalRank){
         SQLiteDatabase db = this.getWritableDatabase();
         String SQL = "UPDATE GOALS SET GoalName ='"+Goal+"',GoalCost ='"+GoalCost+"',GoalDate ='"+GoalDate+"' WHERE GoalRank ="+GoalRank;
+        db.execSQL(SQL);
+    }
 
+    public void updateGoalRank(Integer GoalRank){
+        SQLiteDatabase db = this.getWritableDatabase();
+        String SQL = "UPDATE GOALS SET GoalAccomplished ='1' WHERE GoalRank = "+GoalRank;
         db.execSQL(SQL);
     }
 

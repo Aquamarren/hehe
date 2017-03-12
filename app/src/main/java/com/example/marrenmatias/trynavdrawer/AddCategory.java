@@ -6,7 +6,6 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.util.DisplayMetrics;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
@@ -34,7 +33,7 @@ public class AddCategory extends Activity {
     private CheckBox checkBoxDueDate;
     private String checkBox = "";
     SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd");
-    int cID;
+    String cID;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -57,33 +56,14 @@ public class AddCategory extends Activity {
         timePicker = (TimePicker)findViewById(R.id.timePicker);
         checkBoxDueDate = (CheckBox)findViewById(R.id.checkBoxDueDate);
 
-        calendar = Calendar.getInstance();
-        int hour = calendar.get(Calendar.HOUR_OF_DAY);
-        int min = calendar.get(Calendar.MINUTE);
-
         Intent i = getIntent();
-        cID = i.getIntExtra("id",123);
+        cID = i.getStringExtra("id");
 
         InsertCategory();
 
-        /*
-        NOTE: IF YUNG CATEGORY NAME AY EXISTING NA DI PDENG IINSERT
-         */
     }
 
-    /*
-    String time = extras.getString("time");
-String[] parts = time.split(":");
-timeEt.setCurrentHour(Integer.valueOf(parts[0]));
-timeEt.setCurrentMinute(Integer.valueOf(parts[1]));
-and concat it, when inserting or updating
 
-dbConnector.insertContact(nameEt.getText().toString(),
-                          capEt.getText().toString(),
-                          timeEt.getCurrentHour().toString() + ":"
-                              + timeEt.getCurrentMinute().toString(),
-                          codeEt.getText().toString());
-     */
     protected void openDatabase() {
         db = openOrCreateDatabase("THRIFTY.db", Context.MODE_PRIVATE, null);
     }
@@ -92,8 +72,9 @@ dbConnector.insertContact(nameEt.getText().toString(),
         btnInsertCategory.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                int hour = timePicker.getCurrentHour();
-                int min = timePicker.getCurrentMinute();
+                String hour = timePicker.getCurrentHour().toString();
+                String min = timePicker.getCurrentMinute().toString();
+
 
                 /*
                 if (hour == 0) {
@@ -116,30 +97,31 @@ dbConnector.insertContact(nameEt.getText().toString(),
                     checkBox = "0";
                 }
 
-                String dueDate = df.format(new Date(datePickerDueDate.getYear() - 1900, datePickerDueDate.getMonth(), datePickerDueDate.getDayOfMonth()));
-                String time = String.valueOf(hour) + ":" +String.valueOf(min)+ " " + format;
+                String dueDate = df.format(new Date(datePickerDueDate.getYear(), datePickerDueDate.getMonth(), datePickerDueDate.getDayOfMonth()));
+                String time = hour + ":" + min;
 
                 Cursor curr = db.rawQuery("SELECT * FROM CATEGORY WHERE ACTIVE = 1", null);
                 while(curr.moveToFirst()){
                     String categoryName_ = curr.getString(curr.getColumnIndex("CategoryName"));
-                    if(categoryName_ != editTextCategoryName.getText().toString()) {
-                        if(editTextCategoryName.getText().toString() != null) {
-                            mydb.AddCategory(editTextCategoryName.getText().toString(), checkBox, dueDate,
-                                    hour + ":" + min,String.valueOf(cID));
-                            Log.i("insert", "Category Inserted");
+                    String CategoryName = editTextCategoryName.getText().toString();
+                    if(CategoryName.equals(categoryName_)) {
+                        Toast.makeText(AddCategory.this,"Expense Name already exists!",Toast.LENGTH_SHORT).show();
+                    }
+                    else{
+                        if(CategoryName.length() > 0) {
+                            mydb.AddCategory(editTextCategoryName.getText().toString(), checkBox, dueDate,time,String.valueOf(cID));
 
-                            Intent intent = new Intent(AddCategory.this,Main4Activity.class);
+                            Intent intent = new Intent(AddCategory.this,MainActivity.class);
+                            String frags = "ViewExpense";
+                            intent.putExtra("to", frags);
                             startActivity(intent);
+
                             Toast.makeText(AddCategory.this, "Category Inserted", Toast.LENGTH_SHORT).show();
                         }else{
                             Toast.makeText(AddCategory.this,"Fill up the field",Toast.LENGTH_SHORT).show();
                         }
                     }
-                    else{
-                        Toast.makeText(AddCategory.this,"Expense Name already exists!",Toast.LENGTH_SHORT).show();
-                    }
                 }
-
             }
         });
     }

@@ -18,6 +18,14 @@
         android:text="GRAPH"
         android:id="@+id/btnGraph"
         android:layout_alignBottom="@+id/listViewCategoryExp"
-        android:layout_alignEnd="@+id/listViewCategoryExp" />
+        android:layout_alignEnd="@+id/listViewCategoryExp"
+        android:layout_gravity="center_horizontal|bottom" />
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Add Category"
+        android:id="@+id/btnAddCategory_"
+        android:layout_gravity="right|bottom" />
 
 </FrameLayout>

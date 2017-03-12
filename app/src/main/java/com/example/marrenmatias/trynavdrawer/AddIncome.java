@@ -2,10 +2,10 @@ package com.example.marrenmatias.trynavdrawer;
 
 
 import android.content.Intent;
+import android.database.Cursor;
 import android.graphics.Typeface;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,7 +15,6 @@ import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
-
 /**
  * A simple {@link Fragment} subclass.
  */
@@ -23,6 +22,7 @@ public class AddIncome extends Fragment{
     DatabaseHelper myDb;
     private EditText editTxtAddIncome;
     private Button buttonAddIncome;
+    private TextView IncomeVal;
     TextView i,iv,u;
     ImageButton up;
 
@@ -44,6 +44,7 @@ public class AddIncome extends Fragment{
         myDb = new DatabaseHelper(getActivity());
         editTxtAddIncome = (EditText)v.findViewById(R.id.editTextAddIncome);
         buttonAddIncome = (Button) v.findViewById(R.id.btnAddIncome);
+        IncomeVal = (TextView)v.findViewById(R.id.IncomeVal);
         i = (TextView) v.findViewById(R.id.Income);
         iv = (TextView) v.findViewById(R.id.IncomeVal);
         u = (TextView) v.findViewById(R.id.updatePopup);
@@ -58,16 +59,39 @@ public class AddIncome extends Fragment{
     }
 
     private void AddIncomeAmount() {
+        Cursor cursor = myDb.Income();
+        cursor.moveToFirst();
+        final float incomeAmount = cursor.getFloat(cursor.getColumnIndex("IncomeAmount"));
+        IncomeVal.setText(String.valueOf(incomeAmount));
+
         buttonAddIncome.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(editTxtAddIncome.getText().toString().length() > 0) {
-                    myDb.AddIncome(editTxtAddIncome.getText().toString());
-                    Log.i("update", "Income Add/Updated");
-                    Toast.makeText(getActivity(), "Income Added", Toast.LENGTH_SHORT).show();
+                if ((editTxtAddIncome.getText().toString()).length() > 0) {
+                    float amount = Float.valueOf(editTxtAddIncome.getText().toString());
+                    //float difference = amount - incomeAmount;
+                    /*
 
-                    Intent intent = new Intent(getActivity(),ViewExpense.class);
-                    String frags = "ViewExpense";
+                    if(amount > incomeAmount) {
+                        myDb.AddIncome(difference);
+                        Toast.makeText(getActivity(), "Income Updated", Toast.LENGTH_SHORT).show();
+                        Log.i("update", "Income Add/Updated");
+                    }else if(amount < incomeAmount){
+                        myDb.AddIncome(difference);
+                        Toast.makeText(getActivity(), "Income Updated", Toast.LENGTH_SHORT).show();
+                        Log.i("update", "Income Add/Updated");
+                    }else if(amount == incomeAmount){
+                        myDb.AddIncome(amount);
+                        Toast.makeText(getActivity(), "Income Updated", Toast.LENGTH_SHORT).show();
+                        Log.i("update", "Income Add/Updated");
+                    }*/
+
+
+                    myDb.UpdateIncomeAmount(amount);
+                    Toast.makeText(getActivity(), "Income Updated", Toast.LENGTH_SHORT).show();
+
+                    Intent intent = new Intent(getActivity(), MainActivity.class);
+                    String frags = "AddIncome";
                     intent.putExtra("to", frags);
                     startActivity(intent);
 

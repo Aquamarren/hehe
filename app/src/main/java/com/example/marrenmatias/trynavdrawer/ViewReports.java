@@ -2,6 +2,7 @@ package com.example.marrenmatias.trynavdrawer;
 
 
 import android.content.Context;
+import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
@@ -51,16 +52,28 @@ public class ViewReports extends Fragment {
         btnForecastExp = (Button)v.findViewById(R.id.btnForecastExp);
         btnCheckBudget = (Button)v.findViewById(R.id.btnCheckBudget);
 
+        btnForecastExp.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getActivity(), ForecastBudgetWeek.class);
+                startActivity(intent);
+            }
+        });
+
+        btnGraphShow.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getActivity(), BarChartGraph.class);
+                startActivity(intent);
+            }
+        });
+
         mMessageListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parnet, View view, int position, long id) {
                 // display an activiting show item details
             }
         });
-
-
-
-        // Set list view adapter
 
         cursor = db.rawQuery("SELECT *, " +
                 "EXPENSE.ID AS _id," +
@@ -72,13 +85,15 @@ public class ViewReports extends Fragment {
         mAdapter = new MessageAdapter(getActivity(), cursor);
         mMessageListView.setAdapter(mAdapter);
 
-        // Inflate the layout for this fragment
+
         return v;
+
     }
 
     protected void openDatabase() {
         db = getActivity().openOrCreateDatabase("THRIFTY.db",android.content.Context.MODE_PRIVATE,null);
     }
+
 
     private static final class MessageAdapter extends CursorAdapter {
 

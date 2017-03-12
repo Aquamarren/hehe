@@ -63,7 +63,7 @@ public class ForecastBudgetWeek extends AppCompatActivity {
         Cursor cur = db.rawQuery("SELECT *, EXPENSE.CategoryName, " +
                 "INCOME.ID AS _id, " +
                 "EXPENSE.ID AS _id, " +
-                "(SUM(EXPENSE.ExpenseAmount)/(JulianDay('now') - JulianDay(MIN(EXPENSE.ExpenseDate)))) * 7 AS ExpenseForecast " +
+                "ROUND((SUM(EXPENSE.ExpenseAmount)/(JulianDay('now') - JulianDay(MIN(EXPENSE.ExpenseDate)))) * 7,2) AS ExpenseForecast " +
                 "FROM INCOME, EXPENSE WHERE EXPENSE.ACTIVE = 1 AND INCOME.ACTIVE = 1 " +
                 "AND EXPENSE.ExpenseDate BETWEEN INCOME.IncomeDateTo AND INCOME.IncomeDateFrom " +
                 "GROUP BY EXPENSE.CategoryName ORDER BY EXPENSE.ExpenseDate DESC", null);

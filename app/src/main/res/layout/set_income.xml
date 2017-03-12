@@ -9,22 +9,33 @@
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
-    android:background="@drawable/bg2"
+    android:background="@drawable/bg3"
     tools:context="com.example.marrenmatias.trynavdrawer.SetIncome">
 
-    <TextView
-        android:text="Thrifty"
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="90dp"
+        app:srcCompat="@drawable/flatcash"
+        android:id="@+id/imageView2"
+        android:layout_below="@+id/thrift"
+        android:layout_alignParentStart="true"
+        android:layout_marginTop="25dp"
+        android:layout_toStartOf="@+id/setIncome" />
+
+    <EditText
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentTop="true"
-        android:layout_centerHorizontal="true"
-        android:id="@+id/thrift"
-        android:textSize="36sp"
-        android:textColor="@android:color/white" />
+        android:inputType="number"
+        android:ems="10"
+        android:id="@+id/editTextIncomeAmount"
+        android:gravity="center_horizontal"
+        android:layout_below="@+id/imageView2"
+        android:layout_alignStart="@+id/datePickerFrom"
+        android:layout_alignEnd="@+id/datePickerFrom" />
 
     <ImageButton
         android:layout_width="wrap_content"
-        android:layout_height="100dp"
+        android:layout_height="90dp"
         app:srcCompat="@drawable/ok"
         android:id="@+id/btnSubmit"
         android:clickable="true"
@@ -34,36 +45,17 @@
         android:layout_alignParentBottom="true"
         android:layout_alignParentStart="true" />
 
-    <ImageView
-        android:layout_width="wrap_content"
-        android:layout_height="90dp"
-        app:srcCompat="@drawable/flatcash"
-        android:id="@+id/imageView2"
-        android:layout_below="@+id/thrift"
-        android:layout_alignParentStart="true"
-        android:layout_marginTop="15dp"
-        android:layout_toStartOf="@+id/setIncome" />
-
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textAppearance="?android:attr/textAppearanceLarge"
         android:text="Set Income"
         android:id="@+id/setIncome"
-        android:layout_marginEnd="25dp"
+        android:layout_marginEnd="27dp"
+        android:layout_marginBottom="23dp"
+        android:textSize="36sp"
         android:layout_above="@+id/editTextIncomeAmount"
-        android:layout_alignEnd="@+id/editTextIncomeAmount"
-        android:layout_marginBottom="29dp" />
-
-    <EditText
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:inputType="number"
-        android:ems="10"
-        android:id="@+id/editTextIncomeAmount"
-        android:layout_below="@+id/imageView2"
-        android:layout_alignStart="@+id/datePickerFrom"
-        android:layout_alignEnd="@+id/datePickerFrom" />
+        android:layout_alignParentEnd="true" />
 
     <DatePicker
         android:layout_width="wrap_content"
@@ -81,7 +73,7 @@
         android:id="@+id/datePickerTo"
         android:datePickerMode="spinner"
         android:calendarViewShown="false"
-        android:layout_marginBottom="81dp"
+        android:layout_marginBottom="62dp"
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true" />
 

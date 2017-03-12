@@ -2,24 +2,23 @@ package com.example.marrenmatias.trynavdrawer;
 
 
         import android.content.Context;
-        import android.content.Intent;
-        import android.database.Cursor;
-        import android.database.sqlite.SQLiteDatabase;
-        import android.graphics.Typeface;
-        import android.os.Bundle;
-        import android.support.v7.app.AppCompatActivity;
-        import android.util.Log;
-        import android.view.View;
-        import android.widget.Button;
-        import android.widget.DatePicker;
-        import android.widget.EditText;
-        import android.widget.ImageButton;
-        import android.widget.TextView;
-        import android.widget.Toast;
+import android.content.Intent;
+import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
+import android.graphics.Typeface;
+import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
+import android.view.View;
+import android.widget.DatePicker;
+import android.widget.EditText;
+import android.widget.ImageButton;
+import android.widget.TextView;
+import android.widget.Toast;
 
-        import java.text.SimpleDateFormat;
-        import java.text.ParseException;
-        import java.util.Date;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 
 public class SetIncome extends AppCompatActivity {
@@ -27,7 +26,7 @@ public class SetIncome extends AppCompatActivity {
     SQLiteDatabase db;
     EditText txtIncomeAmount;
     ImageButton btnSetBudget;
-    TextView tf,si;
+    TextView si;
 
     private DatePicker datePickerTo;
     private DatePicker datePickerFrom;
@@ -43,16 +42,13 @@ public class SetIncome extends AppCompatActivity {
         myDb = new DatabaseHelper(this);
         openDatabase();
 
-        tf = (TextView) findViewById(R.id.thrift);
         si = (TextView) findViewById(R.id.setIncome);
         txtIncomeAmount = (EditText)findViewById(R.id.editTextIncomeAmount);
         btnSetBudget = (ImageButton)findViewById(R.id.btnSubmit);
         datePickerTo = (DatePicker) findViewById(R.id.datePickerTo);
         datePickerFrom = (DatePicker)findViewById(R.id.datePickerFrom);
 
-        Typeface sCustomFont = Typeface.createFromAsset(getAssets(),"fonts/King-Basil-Lite.otf");
         Typeface myCustomFont = Typeface.createFromAsset(getAssets(), "fonts/BebasNeue.otf");
-        tf.setTypeface(sCustomFont);
         si.setTypeface(myCustomFont);
         txtIncomeAmount.setTypeface(myCustomFont);
 
@@ -87,6 +83,14 @@ public class SetIncome extends AppCompatActivity {
         }else{
             AddData();
         }
+    }
+
+    @Override
+    public void onBackPressed(){
+        super.onBackPressed();
+        Intent intent = new Intent(SetIncome.this,SetIncome.class);
+        startActivity(intent);
+        finish();
     }
 
     protected void openDatabase() {

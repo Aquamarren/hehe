@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/set_budget_first"
     android:layout_width="match_parent"
@@ -8,54 +9,60 @@
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
-    android:background="@drawable/bg2"
+    android:background="@drawable/bg3"
     tools:context="com.example.marrenmatias.trynavdrawer.SetBudget_first">
 
 
-    <Button
+    <ListView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Check"
-        android:id="@+id/btnSubmit"
-        android:layout_alignParentBottom="true"
-        android:layout_centerHorizontal="true"
-        android:layout_marginBottom="85dp"
-        android:onClick="onClick"/>
-
-    <Button
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Add Category"
-        android:id="@+id/btnInsertCategory"
-        android:layout_alignParentTop="true"
-        android:layout_alignParentRight="true"
-        android:layout_alignParentEnd="true"
-        android:layout_marginTop="65dp"
-        android:onClick="onClick"/>
+        android:id="@+id/listViewFirstCategory"
+        android:layout_alignParentStart="true"
+        android:layout_below="@+id/btnInsertCategory"
+        android:layout_marginBottom="80dp"/>
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textAppearance="?android:attr/textAppearanceLarge"
         android:text="Set Budget"
-        android:id="@+id/textView3"
+        android:id="@+id/setBudget"
         android:layout_alignParentTop="true"
-        android:layout_centerHorizontal="true" />
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="26dp" />
+
+    <ImageButton
+        android:layout_width="wrap_content"
+        android:layout_height="100dp"
+        android:text="Add Category"
+        android:id="@+id/btnInsertCategory"
+        android:onClick="onClick"
+        app:srcCompat="@drawable/addcateg"
+        android:backgroundTint="@android:color/transparent"
+        android:scaleType="centerInside"
+        android:layout_below="@+id/setBudget"
+        android:layout_toEndOf="@+id/setBudget"
+        android:layout_marginStart="27dp" />
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textAppearance="?android:attr/textAppearanceLarge"
         android:text="Budget"
-        android:id="@+id/txtViewTotalBudget"
-        android:layout_alignTop="@+id/btnInsertCategory"
-        android:layout_alignRight="@+id/btnSubmit"
-        android:layout_alignEnd="@+id/btnSubmit" />
+        android:layout_below="@+id/setBudget"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="35dp"
+        android:id="@+id/txtViewTotalBudget" />
 
-    <ListView
+    <ImageButton
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/listViewFirstCategory"
-        android:layout_centerVertical="true"
+        android:layout_height="70dp"
+        android:text="Check"
+        android:id="@+id/btnSubmit"
+        android:onClick="onClick"
+        app:srcCompat="@drawable/oko"
+        android:backgroundTint="@android:color/transparent"
+        android:scaleType="centerInside"
+        android:layout_alignParentBottom="true"
         android:layout_alignParentStart="true" />
 </RelativeLayout>
