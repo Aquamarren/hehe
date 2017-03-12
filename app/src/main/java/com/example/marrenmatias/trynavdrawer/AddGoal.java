@@ -50,7 +50,10 @@ public class AddGoal extends Activity {
                 String GoalRank = bundle.getString("goalRank");
                 mydb.insertGoal(editTextGoalName.getText().toString(),editTextGoalCost.getText().toString(),timestamp,GoalRank);
                 Log.i("insert", "Goal Inserted");
-                Intent intent = new Intent(AddGoal.this,ViewGoalsPage.class);
+
+                Intent intent = new Intent(AddGoal.this,MainActivity.class);
+                String frags = "ViewGoals";
+                intent.putExtra("to", frags);
                 startActivity(intent);
             }
         });

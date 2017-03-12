@@ -1,6 +1,7 @@
 package com.example.marrenmatias.trynavdrawer;
 
 
+import android.content.Intent;
 import android.graphics.Typeface;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -12,6 +13,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.TextView;
+import android.widget.Toast;
 
 
 /**
@@ -59,8 +61,19 @@ public class AddIncome extends Fragment{
         buttonAddIncome.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                myDb.AddIncome(editTxtAddIncome.getText().toString());
-                Log.i("update", "Income Add/Updated");
+                if(editTxtAddIncome.getText().toString().length() > 0) {
+                    myDb.AddIncome(editTxtAddIncome.getText().toString());
+                    Log.i("update", "Income Add/Updated");
+                    Toast.makeText(getActivity(), "Income Added", Toast.LENGTH_SHORT).show();
+
+                    Intent intent = new Intent(getActivity(),ViewExpense.class);
+                    String frags = "ViewExpense";
+                    intent.putExtra("to", frags);
+                    startActivity(intent);
+
+                }else{
+                    Toast.makeText(getActivity(), "Fill up the field", Toast.LENGTH_SHORT).show();
+                }
             }
         });
     }

@@ -22,7 +22,7 @@ public class AddSavings extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_add_savings);
+        setContentView(R.layout.add_savings);
         openDatabase();
         mydb = new DatabaseHelper(this);
 

@@ -6,7 +6,6 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
-import android.widget.Toast;
 
 
 /**
@@ -61,7 +60,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                 "SavingsAmount FLOAT)");
 
         db.execSQL("CREATE TABLE CATEGORY (ID INTEGER PRIMARY KEY AUTOINCREMENT, CategoryName TEXT, " +
-                "CategoryImg TEXT, Budget FLOAT, BudgetCost FLOAT, Checkbox INTEGER, DueDate DATE, DueTime TIME, ACTIVE INTEGER)");
+                "CategoryImg TEXT, Budget FLOAT, BudgetCost FLOAT, " +
+                "Checkbox INTEGER, DueDate DATE, DueTime TEXT, IconID INTEGER, ACTIVE INTEGER)");
 
         db.execSQL("INSERT INTO CATEGORY (CategoryName,Budget,BudgetCost,ACTIVE) VALUES('Electricity',0,0,1), ('Water',0,0,1), ('House Rent',0,0,1)");
 
@@ -137,10 +137,10 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         db.execSQL(SQL);
     }
 
-    public void AddCategory(String Category, String Check, String DueDate, String DueTime){
+    public void AddCategory(String Category, String Check, String DueDate, String DueTime, String IconID){
         SQLiteDatabase db = this. getWritableDatabase();
-        String SQL = "INSERT INTO CATEGORY (CategoryName, ACTIVE, Checkbox, DueDate, DueTime, Budget, BudgetCost) " +
-                "VALUES ('" + Category + "', 1,"+ Check +","+ DueDate +","+ DueTime +",0,0)";
+        String SQL = "INSERT INTO CATEGORY (CategoryName, ACTIVE, Checkbox, DueDate, DueTime, IconID,Budget, BudgetCost) " +
+                "VALUES ('" + Category + "', 1,"+ Check +","+ DueDate +",'"+ DueTime +"',"+IconID+",0,0)";
         db.execSQL(SQL);
     }
 
@@ -193,6 +193,17 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
         String SQLUpdate = "UPDATE CATEGORY SET BUDGET = BUDGET -"+ Expense + " WHERE ID = "+CategoryID;
         db.execSQL(SQLUpdate);
+    }
+
+    public void UpdateExpenseName(String CategoryName, String OldCategoryName){
+        SQLiteDatabase db = this.getWritableDatabase();
+        String SQL1 = "UPDATE CATEGORY SET CategoryName = '"+ CategoryName +"' " +
+                "WHERE ACTIVE = 1 AND CategoryName = '" + OldCategoryName +"'";
+        db.execSQL(SQL1);
+
+        String SQL = "UPDATE EXPENSE SET CategoryName = '" + CategoryName + "' " +
+                "WHERE ACTIVE = 1 AND CategoryName = '"+ OldCategoryName +"'";
+        db.execSQL(SQL);
     }
 
     public void updateSavings(String SavingsAmount){

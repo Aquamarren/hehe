@@ -1,11 +1,14 @@
 package com.example.marrenmatias.trynavdrawer;
 
 import android.content.Context;
+import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.view.View;
+import android.widget.Button;
 import android.widget.RelativeLayout;
 
 import com.github.mikephil.charting.charts.BarChart;
@@ -23,6 +26,9 @@ public class BarChartGraph extends AppCompatActivity {
     DatabaseHelper mydb;
     SQLiteDatabase db;
     private RelativeLayout mainBarLayout;
+    private Button btnBarGraph;
+    private Button btnForecastPage;
+    private Button btnPieChart;
 
 
     @Override
@@ -34,6 +40,9 @@ public class BarChartGraph extends AppCompatActivity {
 
 
         mainBarLayout = (RelativeLayout)findViewById(R.id.mainBarLayout);
+        btnBarGraph = (Button)findViewById(R.id.btnBarGraph);
+        btnForecastPage = (Button)findViewById(R.id.btnForecastPage);
+        btnPieChart = (Button)findViewById(R.id.btnPieChart);
         barChart = new BarChart(this);
         mainBarLayout.addView(barChart, 500, 800);
 
@@ -43,11 +52,13 @@ public class BarChartGraph extends AppCompatActivity {
         //barChart.setVisibleXRangeMaximum(5);
         barChart.getAxisLeft().setDrawGridLines(false);
         barChart.getXAxis().setDrawGridLines(false);
+        barChart.getXAxis().setLabelsToSkip(0);
         barChart.getXAxis().setPosition(XAxis.XAxisPosition.BOTTOM);
 
         barChart.getAxisRight().setEnabled(false);
         barChart.getAxisRight().setDrawGridLines(false);
         barChart.getAxisRight().setDrawLabels(false);
+
 
         // Restarting chart views
         barChart.notifyDataSetChanged();
@@ -55,19 +66,45 @@ public class BarChartGraph extends AppCompatActivity {
         barChart.notifyDataSetChanged();
         barChart.invalidate();
 
-        setCategoriesBarChart();
-
         Legend l = barChart.getLegend();
         l.setPosition(Legend.LegendPosition.BELOW_CHART_CENTER);
         l.setEnabled(true);
         l.setXEntrySpace(17);
         l.setYEntrySpace(15);
 
+        setCategoriesBarChart();
+        Buttons();
 
     }
 
     protected void openDatabase() {
         db = openOrCreateDatabase("THRIFTY.db", Context.MODE_PRIVATE, null);
+    }
+
+    public  void Buttons(){
+        btnBarGraph.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(BarChartGraph.this, BarChartGraph.class);
+                startActivity(intent);
+            }
+        });
+
+        btnForecastPage.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(BarChartGraph.this, ForecastBudgetWeek.class);
+                startActivity(intent);
+            }
+        });
+
+        btnPieChart.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(BarChartGraph.this, PieChartGraph.class);
+                startActivity(intent);
+            }
+        });
     }
 
     public void setCategoriesBarChart(){
@@ -84,11 +121,11 @@ public class BarChartGraph extends AppCompatActivity {
             values[i] = ce.getFloat(0);
         }
 
-       ArrayList<String> xVals = new ArrayList<String>();
+        ArrayList<String> xVals = new ArrayList<String>();
         ArrayList<BarEntry> yVals1 = new ArrayList<BarEntry>();
         for (int j = 0; j < count; j++){
             xVals.add(categoryNames[j]);
-            yVals1.add(new BarEntry(values[j],(count-1)-j));}
+            yVals1.add(new BarEntry(values[j],j));}
 
 
         BarDataSet dataSet = new BarDataSet(yVals1, "Expenses Category");
