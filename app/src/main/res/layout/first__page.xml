@@ -1,0 +1,138 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/first__page"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:paddingBottom="@dimen/activity_vertical_margin"
+    android:paddingLeft="@dimen/activity_horizontal_margin"
+    android:paddingRight="@dimen/activity_horizontal_margin"
+    android:paddingTop="@dimen/activity_vertical_margin"
+    android:background="@drawable/background"
+    tools:context="com.example.marrenmatias.trynavdrawer.FirstPage">
+
+    <ImageView
+        app:srcCompat="@drawable/logo"
+        android:id="@+id/imageView6"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:scaleType="centerInside"
+        android:layout_alignParentStart="true"
+        android:adjustViewBounds="true"
+        android:cropToPadding="true"
+        android:layout_above="@+id/thrifty"
+        android:layout_alignParentEnd="true" />
+
+    <Button
+        android:text="Log In"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/loginButton"
+        android:textSize="23dp"
+        android:background="#475059"
+        android:textColor="@android:color/background_light"
+        android:layout_below="@+id/forgotPass"
+        android:layout_alignStart="@+id/editTextPassword"
+        android:layout_marginTop="10dp"
+        android:layout_alignEnd="@+id/editTextPassword"
+        android:onClick="onButtonClick" />
+
+    <TextView
+        android:text="Forgot Password?"
+        android:textSize="20dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/editTextPassword"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="10dp"
+        android:id="@+id/forgotPass"
+        android:clickable="true"
+        android:textColor="@android:color/background_light" />
+
+    <TextView
+        android:text="OR"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="20dp"
+        android:id="@+id/or"
+        android:textColor="@android:color/background_light"
+        android:layout_marginTop="6dp"
+        android:layout_below="@+id/loginButton"
+        android:layout_centerHorizontal="true" />
+
+
+
+    <EditText
+        android:layout_width="wrap_content"
+        android:inputType="textPersonName"
+        android:ems="12"
+        android:layout_marginTop="15dp"
+        android:id="@+id/editTextUsername"
+        android:background="@android:color/background_light"
+        android:padding="5dp"
+        android:layout_below="@+id/thrifty"
+        android:layout_alignStart="@+id/editTextPassword"
+        android:layout_height="wrap_content"
+        android:drawableLeft="@drawable/username"
+        android:hint="Username" />
+
+    <EditText
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:inputType="textPassword"
+        android:ems="12"
+        android:layout_marginTop="12dp"
+        android:id="@+id/editTextPassword"
+        android:background="@android:color/background_light"
+        android:layout_below="@+id/editTextUsername"
+        android:layout_centerHorizontal="true"
+        android:drawableLeft="@drawable/pass"
+        android:hint="Password" />
+
+    <com.facebook.login.widget.LoginButton
+        android:id="@+id/login_button"
+        android:layout_width="200sp"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_alignTop="@+id/or"
+        android:layout_centerHorizontal="true" />
+
+    <ImageButton
+        android:layout_width="wrap_content"
+        android:layout_height="70dp"
+        android:adjustViewBounds="true"
+        app:srcCompat="@drawable/signup"
+        android:id="@+id/signUp"
+        android:cropToPadding="false"
+        android:fitsSystemWindows="false"
+        android:scaleType="centerInside"
+        android:backgroundTint="@android:color/transparent"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentEnd="true" />
+
+    <TextView
+        android:id="@+id/manage"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="25dp"
+        android:text="MANAGE FINANCES AT YOUR FINGERTIPS"
+        android:layout_marginTop="189dp"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentStart="true"
+        android:layout_marginStart="21dp" />
+
+    <TextView
+        android:text="Thrifty"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/thrifty"
+        android:textSize="60dp"
+        android:textColor="@android:color/white"
+        android:layout_marginBottom="32dp"
+        android:layout_alignBottom="@+id/manage"
+        android:layout_alignEnd="@+id/login_button" />
+
+
+</RelativeLayout>
