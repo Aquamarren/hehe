@@ -97,7 +97,7 @@ public class AddCategory extends Activity {
                     checkBox = "0";
                 }
 
-                String dueDate = df.format(new Date(datePickerDueDate.getYear(), datePickerDueDate.getMonth(), datePickerDueDate.getDayOfMonth()));
+                String dueDate = df.format(new Date(datePickerDueDate.getYear()-1900, datePickerDueDate.getMonth(), datePickerDueDate.getDayOfMonth()));
                 String time = hour + ":" + min;
 
                 Cursor curr = db.rawQuery("SELECT * FROM CATEGORY WHERE ACTIVE = 1", null);
@@ -110,13 +110,13 @@ public class AddCategory extends Activity {
                     else{
                         if(CategoryName.length() > 0) {
                             mydb.AddCategory(editTextCategoryName.getText().toString(), checkBox, dueDate,time,String.valueOf(cID));
+                            Toast.makeText(AddCategory.this, "Category Inserted", Toast.LENGTH_SHORT).show();
 
                             Intent intent = new Intent(AddCategory.this,MainActivity.class);
                             String frags = "ViewExpense";
                             intent.putExtra("to", frags);
                             startActivity(intent);
 
-                            Toast.makeText(AddCategory.this, "Category Inserted", Toast.LENGTH_SHORT).show();
                         }else{
                             Toast.makeText(AddCategory.this,"Fill up the field",Toast.LENGTH_SHORT).show();
                         }

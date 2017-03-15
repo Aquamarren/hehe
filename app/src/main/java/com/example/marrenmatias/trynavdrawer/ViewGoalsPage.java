@@ -41,6 +41,7 @@ public class ViewGoalsPage extends Fragment {
         mydb = new DatabaseHelper(getActivity());
         listViewGoalsList = (ListView) v.findViewById(R.id.listViewGoalsList);
         showGoalsList();
+        goalAccomplished();
         return v;
     }
 
@@ -48,10 +49,34 @@ public class ViewGoalsPage extends Fragment {
         db = getActivity().openOrCreateDatabase("THRIFTY.db",android.content.Context.MODE_PRIVATE,null); //RIGHT
     }
 
+    public void goalAccomplished(){
+        Cursor cursor = db.rawQuery("SELECT * FROM GOALS WHERE GoalAccomplished = 1 AND MoneySaved = GoalCost", null);
+        while(cursor.moveToNext()){
+            String goalName_ = cursor.getString(1);
+            String goalCost = cursor.getString(2);
+            int goalRank = Integer.valueOf(cursor.getString(4));
+            float goalPoints = Math.round(goalRank / 5);
+            float moneySaved = Float.valueOf(cursor.getString(7));
+            if (Float.valueOf(goalCost) == moneySaved) {
+                String SQL2 = "UPDATE GOALS SET GoalAccomplished = 0, GoalPoints = " + goalPoints + " WHERE GoalRank = "+ goalRank;
+                db.execSQL(SQL2);
+                String SQL3 = "INSERT INTO GOALS (GoalRank, GoalAccomplished, MoneySaved) VALUES (" + goalRank + ", 2, 0)";
+                db.execSQL(SQL3);
+                Toast.makeText(getActivity(), "Congratulations! Goal " + goalRank + " Accomplished! Enjoy your "+ goalName_ + "!", Toast.LENGTH_SHORT).show();
+            }
+        }
+
+        //Magaadd ng badge
+            /*
+            yung badge nasa database na. tapos everytime na accomplsh magiging visible ung badge prng listbiew lng
+            na inooutput pa horizontal
+             */
+    }
+
     public void showGoalsList(){
         final ArrayList<String> theList = new ArrayList<>();
 
-        data = db.rawQuery("SELECT GoalRank FROM GOALS WHERE GoalAccomplished = 1 AND GoalAccomplished = 2 ORDER BY GoalRank ASC",null);
+        data = db.rawQuery("SELECT GoalRank FROM GOALS WHERE  GoalAccomplished > 0 ORDER BY GoalRank ASC",null);
         while(data.moveToNext()) {
             theList.add(data.getString(0));
             ListAdapter listAdapter = new ArrayAdapter<>(getActivity(), android.R.layout.simple_list_item_1, theList);
@@ -62,20 +87,24 @@ public class ViewGoalsPage extends Fragment {
                 public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                     data.moveToPosition(position);
                     String result = data.getString(data.getColumnIndex("GoalRank"));
-                    detail = db.rawQuery("SELECT * FROM GOALS WHERE GoalAccomplished = 1 AND GoalAccomplished = 2 AND GoalRank = " + result, null);
+                    Toast.makeText(getActivity(), result, Toast.LENGTH_SHORT).show();
+                    detail = db.rawQuery("SELECT *, count(*) FROM GOALS WHERE GoalAccomplished = 1 AND GoalRank = " + result, null);
                     detail.moveToFirst();
-                    final String goalName = detail.getString(detail.getColumnIndex("GoalName"));
-                    String goalAccomplished = detail.getString(detail.getColumnIndex("GoalAccomplished"));
+                    int count = detail.getInt(0);
 
-                    if(goalName == null && goalAccomplished == "1"){
-                        Intent intent = new Intent(getActivity(), AddGoal.class);
-                        intent.putExtra("goalRank", result);
-                        startActivity(intent);
-                    }else if(goalName != null && goalAccomplished == "1"){
-                        Intent intent2 = new Intent(getActivity(), GoalDetails.class);
-                        intent2.putExtra("goalRank",result);
-                        startActivity(intent2);
-                    }else if(goalAccomplished == "2"){
+                    final String goalName = detail.getString(detail.getColumnIndex("GoalName"));
+
+                    if(count > 0){
+                        if(goalName == null){
+                            Intent intent = new Intent(getActivity(), AddGoal.class);
+                            intent.putExtra("goalRank", result);
+                            startActivity(intent);
+                        }else{
+                            Intent intent2 = new Intent(getActivity(), GoalDetails.class);
+                            intent2.putExtra("goalRank",result);
+                            startActivity(intent2);
+                        }
+                    }else{
                         Toast.makeText(getActivity(), "Cannot Add Goal!", Toast.LENGTH_SHORT).show();
                     }
                 }

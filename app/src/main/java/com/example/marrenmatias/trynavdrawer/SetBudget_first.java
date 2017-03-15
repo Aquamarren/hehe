@@ -54,16 +54,21 @@ public class SetBudget_first extends AppCompatActivity {
 
         AddCategory();
         ShowFirstCategory();
-        AddBudget();
+    }
+
+    @Override
+    public void onBackPressed(){
+        super.onBackPressed();
+        finish();
     }
 
     protected void openDatabase() {
         db = openOrCreateDatabase("THRIFTY.db", Context.MODE_PRIVATE, null);
     }
 
-    public void TotalBudget(){
-        String totalbudget = c.getString(0);
-        txtTotalBudget.setText(totalbudget);
+    public void TotalBudget(){//String.format("%.2f",difference)
+        float totalbudget = c.getFloat(0);
+        txtTotalBudget.setText(String.format("%.2f", totalbudget));
     }
 
     public void ShowFirstCategory(){
@@ -96,9 +101,7 @@ public class SetBudget_first extends AppCompatActivity {
                 startActivity(new Intent(SetBudget_first.this,IconCateg.class));
             }
         });
-    }
 
-    public void AddBudget() {
         btnCheck.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -109,5 +112,7 @@ public class SetBudget_first extends AppCompatActivity {
             }
         });
     }
+
+
 }
 

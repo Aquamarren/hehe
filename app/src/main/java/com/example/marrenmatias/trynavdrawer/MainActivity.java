@@ -106,6 +106,12 @@ public class MainActivity extends AppCompatActivity
             FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
             fragmentTransaction.replace(R.id.frame,fragment,"fragment6");
             fragmentTransaction.commit();
+        } else if (fragmentName != null && fragmentName.equals("ViewIncome")) {
+            setTitle("Income");
+            AddIncome fragment = new AddIncome();
+            FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
+            fragmentTransaction.replace(R.id.frame,fragment,"fragment1");
+            fragmentTransaction.commit();
         }
 
 

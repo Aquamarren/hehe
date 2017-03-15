@@ -54,22 +54,43 @@ public class AddIncome extends Fragment{
         i.setTypeface(myCustomFont);
         iv.setTypeface(myCustomFont);
         u.setTypeface(myCustomFont);
+
+        Cursor cursor = myDb.Income();
+        cursor.moveToFirst();
+        final float incomeAmount = cursor.getFloat(cursor.getColumnIndex("IncomeAmount"));
+        IncomeVal.setText(String.format("%.2f", incomeAmount));
         AddIncomeAmount();
         return v;
     }
 
     private void AddIncomeAmount() {
-        Cursor cursor = myDb.Income();
-        cursor.moveToFirst();
-        final float incomeAmount = cursor.getFloat(cursor.getColumnIndex("IncomeAmount"));
-        IncomeVal.setText(String.valueOf(incomeAmount));
-
         buttonAddIncome.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if ((editTxtAddIncome.getText().toString()).length() > 0) {
                     float amount = Float.valueOf(editTxtAddIncome.getText().toString());
-                    //float difference = amount - incomeAmount;
+
+                    myDb.UpdateIncomeAmount(amount);
+                    Toast.makeText(getActivity(), "Income Updated", Toast.LENGTH_SHORT).show();
+
+                    Intent intent = new Intent(getActivity(), MainActivity.class);
+                    String frags = "ViewIncome";
+                    intent.putExtra("to", frags);
+                    startActivity(intent);
+
+                }else{
+                    Toast.makeText(getActivity(), "Fill up the field", Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
+    }
+
+
+    
+}
+
+
+//float difference = amount - incomeAmount;
                     /*
 
                     if(amount > incomeAmount) {
@@ -85,23 +106,3 @@ public class AddIncome extends Fragment{
                         Toast.makeText(getActivity(), "Income Updated", Toast.LENGTH_SHORT).show();
                         Log.i("update", "Income Add/Updated");
                     }*/
-
-
-                    myDb.UpdateIncomeAmount(amount);
-                    Toast.makeText(getActivity(), "Income Updated", Toast.LENGTH_SHORT).show();
-
-                    Intent intent = new Intent(getActivity(), MainActivity.class);
-                    String frags = "AddIncome";
-                    intent.putExtra("to", frags);
-                    startActivity(intent);
-
-                }else{
-                    Toast.makeText(getActivity(), "Fill up the field", Toast.LENGTH_SHORT).show();
-                }
-            }
-        });
-    }
-
-
-    
-}

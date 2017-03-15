@@ -88,8 +88,6 @@ public class SetIncome extends AppCompatActivity {
     @Override
     public void onBackPressed(){
         super.onBackPressed();
-        Intent intent = new Intent(SetIncome.this,SetIncome.class);
-        startActivity(intent);
         finish();
     }
 

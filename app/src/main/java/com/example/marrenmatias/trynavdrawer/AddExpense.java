@@ -71,13 +71,15 @@ public class AddExpense extends Activity{
         float budgetCost = Float.valueOf(i.getStringExtra("budgetCost"));
         float budget = Float.valueOf(i.getStringExtra("budget"));
         float difference = Math.abs(budgetCost - budget);
-        textViewExpense_.setText(String.format("%.2f",difference) + "/" + String.format("%.2f",budgetCost));
+
+
+        textViewExpense_.setText(String.format("%.2f",budget) + "/" + String.format("%.2f",budgetCost));
         editTextExpenseName.setText(categoryName);
 
         if(budget < 0) {
-            float percentage = (difference/budgetCost) * 100;
-            progressBarExpense.setProgress((int)difference);
-            textViewPercentIncrease.setText(String.valueOf(percentage));
+            float percentage = ((difference/budgetCost) * 100);
+            //progressBarExpense.setProgress((int)difference);
+            textViewPercentIncrease.setText(String.format("%.2f",percentage));
         }else{
             progressBarExpense.setProgress((int)difference);
         }

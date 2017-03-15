@@ -3,6 +3,7 @@
     package="com.example.marrenmatias.trynavdrawer">
 
     <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
 
     <application
         android:allowBackup="true"
@@ -41,10 +42,9 @@
         <activity android:name=".AddSavings" />
         <activity android:name=".AddExpense" />
         <activity android:name=".GoalDetails" />
-        <activity
-            android:name=".GoalForecast"
-            android:theme="@style/AppTheme.PopupOverlay" />
-        <activity android:name=".ForecastBudget" />
+        <activity android:name=".GoalForecast" />
+        <activity android:name=".ForecastBudgetWeek" />
+        <activity android:name=".ForecastBudgetMonth" />
         <activity android:name=".Main4Activity" />
         <activity android:name=".MainActivity" />
         <activity android:name=".SetBudget_first" />
@@ -53,7 +53,13 @@
         <activity android:name=".display" />
         <activity android:name=".SignUp" />
         <activity android:name=".UpdateBudget" />
-        <activity android:name=".ChangePic"></activity>
+        <activity android:name=".BarChartGraph" />
+        <activity android:name=".PieChartGraph" />
+        <activity android:name=".ChangePic" />
+        <activity android:name=".ViewBadges" />
+        <activity android:name=".ViewSettings" />
+        <activity android:name=".UpdateBudget_first" />
+        <activity android:name=".IconCateg"></activity>
     </application>
 
 </manifest>

@@ -10,9 +10,12 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.Toast;
 
+import java.io.IOException;
+import java.io.InputStream;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
@@ -41,19 +44,19 @@ public class AddGoal extends Activity {
         int width = dm.widthPixels;
         int height = dm.heightPixels;
 
-        getWindow().setLayout((int)(width*.7),(int)(height*.5));
+        getWindow().setLayout((int)(width*.9),(int)(height*.9));
 
         editTextGoalName = (EditText)findViewById(R.id.editTextGoalName);
         editTextGoalCost = (EditText)findViewById(R.id.editTextGoalCost);
         btnSaveGoal = (Button)findViewById(R.id.btnSaveGoal);
-        imageView = (ImageView)findViewById(R.id.imageView);
+        imageView = (ImageButton)findViewById(R.id.imageButton2);
         button = (Button) findViewById(R.id.button);
         insertGoal();
         openGallery();
     }
 
     public  void openGallery(){
-        button.setOnClickListener(new View.OnClickListener() {
+        imageView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent gallery = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.INTERNAL_CONTENT_URI);
@@ -78,29 +81,37 @@ public class AddGoal extends Activity {
             public void onClick(View v) {
                 String timestamp = new SimpleDateFormat("MMMM dd, yyyy").format(new Date());
                 Bundle bundle = getIntent().getExtras();
-                int GoalRank = bundle.getInt("goalRank");
+                String GoalRank = bundle.getString("goalRank");
+                int goalRank = Integer.valueOf(GoalRank);
+                Toast.makeText(AddGoal.this, GoalRank, Toast.LENGTH_SHORT).show();
 
                 String GoalName = editTextGoalName.getText().toString();
                 String GoalCost = editTextGoalCost.getText().toString();
 
-                if(GoalName.trim().equals("") && GoalCost.trim().equals("")){
-                    Toast.makeText(AddGoal.this, "Cannot Add Goal!", Toast.LENGTH_SHORT).show();
-                }else{
-                    mydb.insertGoal(GoalName, GoalCost, timestamp, GoalRank);
-                    Log.i("insert", "Goal Inserted");
-                    int difference = GoalRank - 1;
-                    if (GoalRank == 1) {
-                        mydb.updateGoalRank(5);
-                    } else if (GoalRank > 1) {
-                        mydb.updateGoalRank(difference);
-                    }
+                try {
+                    InputStream iStream = getContentResolver().openInputStream(imageUri);
+                    byte[] inputData = Utils.getBytes(iStream);
 
-                    Intent intent = new Intent(AddGoal.this, MainActivity.class);
-                    String frags = "ViewGoals";
-                    intent.putExtra("to", frags);
-                    startActivity(intent);
-                }
+                    if(GoalName.length() == 0 && GoalCost.length() == 0){
+                        Toast.makeText(AddGoal.this, "Fill up the field!", Toast.LENGTH_SHORT).show();
+                    }else{
+                        mydb.insertGoal(GoalName, GoalCost, timestamp, GoalRank, inputData);
+                        Log.i("insert", "Goal Inserted");
+                        int difference = goalRank - 1;
+                        if (goalRank == 1) {
+                            mydb.updateGoalRank(5);
+                        } else if (goalRank > 1) {
+                            mydb.updateGoalRank(difference);
+                        }
+
+                        Intent intent = new Intent(AddGoal.this, MainActivity.class);
+                        String frags = "ViewGoals";
+                        intent.putExtra("to", frags);
+                        startActivity(intent);
+                    }
+                } catch (IOException ioe) {}
             }
         });
     }
+
 }

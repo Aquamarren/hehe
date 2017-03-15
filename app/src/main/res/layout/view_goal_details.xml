@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical" android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:weightSum="1">
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -12,12 +13,13 @@
         android:layout_centerHorizontal="true" />
 
     <ImageButton
-        android:layout_width="wrap_content"
+        android:layout_width="233dp"
         android:layout_height="wrap_content"
         android:id="@+id/imageButton"
         android:layout_alignStart="@+id/textViewGoalRank_"
         android:layout_alignEnd="@+id/textViewGoalRank_"
-        android:layout_below="@+id/textViewGoalRank_" />
+        android:layout_below="@+id/textViewGoalRank_"
+        android:layout_weight="0.52" />
 
     <Button
         android:layout_width="wrap_content"
@@ -34,15 +36,17 @@
         android:id="@+id/buttonForecastGoal"
         android:layout_below="@+id/buttonUpdateGoal"
         android:layout_alignStart="@+id/imageButton"
-        android:layout_marginStart="64dp" />
+        android:layout_marginStart="64dp"
+        android:layout_gravity="center_horizontal" />
 
     <EditText
-        android:layout_width="wrap_content"
+        android:layout_width="257dp"
         android:layout_height="wrap_content"
         android:id="@+id/editTextGoalName_"
         android:layout_below="@+id/imageButton"
         android:layout_alignStart="@+id/buttonUpdateGoal"
-        android:layout_alignParentEnd="true" />
+        android:layout_alignParentEnd="true"
+        android:hint="Goal Name"/>
 
     <EditText
         android:layout_width="wrap_content"
@@ -60,5 +64,6 @@
         android:text="Amount Saved"
         android:id="@+id/textViewMoneySaved"
         android:layout_below="@+id/imageButton"
-        android:layout_alignStart="@+id/imageButton" />
+        android:layout_alignStart="@+id/imageButton"
+        android:layout_gravity="center_horizontal" />
 </LinearLayout>

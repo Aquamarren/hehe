@@ -5,13 +5,19 @@ import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.net.Uri;
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.util.DisplayMetrics;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import java.io.IOException;
+import java.io.InputStream;
 
 /**
  * Created by MarrenMatias on 2/15/2017.
@@ -26,6 +32,9 @@ public class GoalDetails extends Activity {
     private EditText editTextGoalCost_;
     Cursor data;
     private TextView textViewMoneySaved;
+    private ImageButton imageButton;
+    private static  final int PICK_IMAGE = 70;
+    Uri imageUri;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -48,12 +57,25 @@ public class GoalDetails extends Activity {
         buttonUpdateGoal = (Button)findViewById(R.id.buttonUpdateGoal);
         buttonForecastGoal = (Button)findViewById(R.id.buttonForecastGoal);
         textViewMoneySaved = (TextView)findViewById(R.id.textViewMoneySaved);
+        imageButton = (ImageButton)findViewById(R.id.imageButton);
 
         viewGoalDetails();
+        openGallery();
     }
 
     protected void openDatabase() {
         db = openOrCreateDatabase("THRIFTY.db", Context.MODE_PRIVATE, null);
+    }
+
+    public  void openGallery(){
+        imageButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent gallery = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.INTERNAL_CONTENT_URI);
+                startActivityForResult(gallery, PICK_IMAGE);
+            }
+        });
+
     }
 
     public void viewGoalDetails() {
@@ -62,20 +84,52 @@ public class GoalDetails extends Activity {
 
         data = db.rawQuery("SELECT * FROM GOALS WHERE GoalAccomplished = 1 AND GoalRank = " + GoalRank, null);
         data.moveToFirst();
-        String textGoalRank = data.getString(4);
+        final String textGoalRank = data.getString(4);
         String textGoalName = data.getString(1);
-        String textGoalCost = data.getString(2);
-        String textMoneySaved = data.getString(7);
+        final String textGoalCost = data.getString(2);
+        final String textMoneySaved = data.getString(7);
 
         textViewGoalRank_.setText(textGoalRank);
         textViewMoneySaved.setText(textMoneySaved);
         editTextGoalName_.setText(textGoalName);
         editTextGoalCost_.setText(textGoalCost);
 
+        try {
+            byte[] bytes = mydb.retreiveImageFromDB();
+            imageButton.setImageBitmap(Utils.getImage(bytes));
+        } catch (Exception e) {
+
+        }
+
         buttonUpdateGoal.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                mydb.updateGoal(editTextGoalName_.getText().toString(), editTextGoalCost_.getText().toString(), GoalRank);
+                String goalName = editTextGoalName_.getText().toString();
+                String goalCost = editTextGoalCost_.getText().toString();
+
+                float moneySaved = Float.valueOf(textMoneySaved);
+                float costOfGoal = Float.valueOf(textGoalCost);
+                Toast.makeText(GoalDetails.this, String.valueOf(moneySaved) + " " +String.valueOf(costOfGoal), Toast.LENGTH_SHORT).show();
+
+                try {
+                    InputStream iStream = getContentResolver().openInputStream(imageUri);
+                    byte[] inputData = Utils.getBytes(iStream);
+
+                    if (goalName.length() > 0 && goalCost.length() > 0) {
+                        mydb.updateGoal(goalName, goalCost, GoalRank,inputData);
+                        if (moneySaved >= costOfGoal) {
+                            float difference = moneySaved - costOfGoal;
+                            mydb.updateSavings(String.valueOf(difference));
+                        }
+
+                        Intent intent = new Intent(GoalDetails.this,MainActivity.class);
+                        String frags = "ViewGoals";
+                        intent.putExtra("to", frags);
+                        startActivity(intent);
+                    } else {
+                        Toast.makeText(GoalDetails.this, "Fill up the field", Toast.LENGTH_SHORT).show();
+                    }
+                } catch (IOException ioe) {}
             }
         });
 
@@ -88,4 +142,5 @@ public class GoalDetails extends Activity {
             }
         });
     }
+
 }

@@ -23,8 +23,7 @@ public class UpdateBudget extends Activity {
     private EditText editTextBudgetCategoryAmount;
     private Button btnSaveBudgetAmount;
     private TextView budgetCategoryName;
-    float budgetAmount;
-    float expenseAmount;
+
 
 
     @Override
@@ -40,7 +39,7 @@ public class UpdateBudget extends Activity {
         int width = dm.widthPixels;
         int height = dm.heightPixels;
 
-        getWindow().setLayout((int)(width*.7),(int)(height*.5));
+        getWindow().setLayout((int)(width*.9),(int)(height*.9));
 
 
         editTextBudgetCategoryAmount = (EditText)findViewById(R.id.editTextBudgetCategoryAmount);
@@ -55,49 +54,60 @@ public class UpdateBudget extends Activity {
 
     private void SaveBudget() {
         Bundle bundle = getIntent().getExtras();
-        String categoryID = bundle.getString("categoryBudgetID");
+        final String categoryID = bundle.getString("categoryBudgetID");
 
         Cursor cur = db.rawQuery("SELECT count(*),* FROM CATEGORY WHERE ID = " + categoryID, null);
         cur.moveToFirst();
         String catName = cur.getString(cur.getColumnIndex("CategoryName"));
-        expenseAmount = cur.getFloat(cur.getColumnIndex("Budget"));
-        float catAmount = cur.getFloat(cur.getColumnIndex("Budget"));
+        final float expenseAmount = cur.getFloat(cur.getColumnIndex("BudgetCost"));
+        final float catAmount = cur.getFloat(cur.getColumnIndex("Budget"));
 
         int count = cur.getInt(0);
         if(count > 0) {
             budgetCategoryName.setText(catName);
-            editTextBudgetCategoryAmount.setText(String.valueOf(catAmount));
-            budgetAmount = Float.parseFloat(editTextBudgetCategoryAmount.getText().toString());
+            editTextBudgetCategoryAmount.setText(String.format("%.2f",expenseAmount));
+
+            Cursor cursor = db.rawQuery("SELECT IncomeAmount FROM INCOME WHERE ACTIVE = 1", null);
+            cursor.moveToFirst();
+            final float incomeAmount = Float.valueOf(cursor.getString(0));
 
             btnSaveBudgetAmount.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    Cursor cursor = db.rawQuery("SELECT IncomeAmount FROM INCOME WHERE ACTIVE = 1", null);
-                    cursor.moveToFirst();
-                    float incomeAmount = Float.valueOf(cursor.getString(0));
+                   float budg = Float.valueOf(editTextBudgetCategoryAmount.getText().toString());
+                    if(budg > expenseAmount){
+                        float getDifference =  budg - expenseAmount;
+                        float totalIncome = incomeAmount - getDifference;
+                        float totalBudget_ = catAmount + getDifference;
 
-                    if (budgetAmount > incomeAmount) {
-                        Toast.makeText(UpdateBudget.this, "Income not enough", Toast.LENGTH_SHORT).show();
-                    } else {
-                        Bundle bundle = getIntent().getExtras();
-                        String categoryIDd = bundle.getString("categoryBudgetID");
-
-                        if(budgetAmount >= expenseAmount){
-                            float getDifference = budgetAmount - expenseAmount;
-                            mydb.updateBudget(editTextBudgetCategoryAmount.getText().toString(),categoryIDd);
-                            mydb.calculateIncome(getDifference);
+                        if(totalIncome < 0) {
+                            Toast.makeText(UpdateBudget.this, "Income not enough", Toast.LENGTH_SHORT).show();
+                        }else {
+                            mydb.updateBudget(editTextBudgetCategoryAmount.getText().toString(), String.valueOf(totalBudget_), categoryID);
+                            mydb.UpdateIncomeAmount(totalIncome);
                             Log.i("insert", "Data Inserted");
-                        }else if(expenseAmount > budgetAmount){
-                            float add = budgetAmount - expenseAmount;
-                            mydb.updateBudget(editTextBudgetCategoryAmount.getText().toString(),categoryIDd);
-                            mydb.calculateIncome(add);
-                            Log.i("insert", "Data Inserted");
+                            Intent();
                         }
 
-                        Intent intent = new Intent(UpdateBudget.this,MainActivity.class);
-                        String frags = "ViewBudget";
-                        intent.putExtra("to", frags);
-                        startActivity(intent);
+                    }
+                    else if(expenseAmount > budg){
+                        float add = expenseAmount - budg;
+                        float totalIncome_ = incomeAmount + add;
+                        float totalBudget = catAmount + add;
+
+                        if(totalIncome_ < 0) {
+                            Toast.makeText(UpdateBudget.this, "Income not enough", Toast.LENGTH_SHORT).show();
+                        }else {
+                            mydb.updateBudget(editTextBudgetCategoryAmount.getText().toString(), String.valueOf(totalBudget), categoryID);
+                            mydb.UpdateIncomeAmount(totalIncome_);
+                            Log.i("insert", "Data Inserted");
+                            Intent();
+                        }
+
+                    }else if(budg == expenseAmount){
+                        float sameBudget = catAmount + 0;
+                        mydb.updateBudget(editTextBudgetCategoryAmount.getText().toString(),String.valueOf(sameBudget),categoryID);
+                        Intent();
                     }
                 }
             });
@@ -105,6 +115,11 @@ public class UpdateBudget extends Activity {
 
     }
 
-
+    public void Intent(){
+        Intent intent = new Intent(UpdateBudget.this, MainActivity.class);
+        String frags = "ViewBudget";
+        intent.putExtra("to", frags);
+        startActivity(intent);
+    }
 
 }

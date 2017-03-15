@@ -103,7 +103,7 @@
         android:layout_height="70dp"
         android:adjustViewBounds="true"
         app:srcCompat="@drawable/signup"
-        android:id="@+id/signUp"
+        android:id="@+id/signUpButton"
         android:cropToPadding="false"
         android:fitsSystemWindows="false"
         android:scaleType="centerInside"

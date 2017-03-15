@@ -69,7 +69,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                 "ExpenseDate DATE, CategoryName TEXT,ACTIVE INTEGER)");
 
         db.execSQL("CREATE TABLE GOALS (ID INTEGER PRIMARY KEY AUTOINCREMENT, GoalName TEXT, GoalCost FLOAT, GoalDate DATE, " +
-                "GoalRank INTEGER, GoalPoints INTEGER, GoalAccomplished INTEGER, MoneySaved FLOAT)");
+                "GoalRank INTEGER, GoalPoints INTEGER, GoalAccomplished INTEGER, MoneySaved FLOAT, GoalImage TEXT)");
 
         db.execSQL("INSERT INTO GOALS (GoalRank, GoalAccomplished, MoneySaved) VALUES (1,2,0),(2,2,0),(3,2,0),(4,2,0),(5,1,0)");
 
@@ -147,7 +147,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
     public void UpdateIncomeAmount(Float Income){
         SQLiteDatabase db = this.getWritableDatabase();
-        String SQL = "UPDATE Income SET = "+ Income + " WHERE ACTIVE = 1";
+        String SQL = "UPDATE INCOME SET IncomeAmount = '"+ Income + "' WHERE ACTIVE = 1";
         db.execSQL(SQL);
     }
 
@@ -213,16 +213,29 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         db.execSQL(SQL);
     }
 
-    public void updateBudget(String Budget, String ID){
+    public void updateBudget(String BudgetCost,  String BudgetC, String ID){
         SQLiteDatabase db = this.getWritableDatabase();
-        String SQL = "UPDATE CATEGORY SET Budget = '" + Budget + "', BudgetCost = "+ Budget +" WHERE ID = " + ID;
+        String SQL = "UPDATE CATEGORY SET  Budget = "+ BudgetC +",BudgetCost = "+ BudgetCost +" WHERE ID = " + ID;
         db.execSQL(SQL);
     }
 
-    public void insertGoal(String Goal, String GoalCost, String GoalDate, Integer GoalRank){
+    public void insertGoal(String Goal, String GoalCost, String GoalDate, String GoalRank, byte[] imageBytes){
         SQLiteDatabase db = this.getWritableDatabase();
-        String SQL = "UPDATE GOALS SET GoalName ='"+Goal+"',GoalCost ='"+GoalCost+"',GoalDate ='"+GoalDate+"' WHERE GoalRank ="+GoalRank;
+        String SQL = "UPDATE GOALS SET GoalName ='"+Goal+"',GoalCost ='"+GoalCost+"',GoalDate ='"+GoalDate+"', " +
+                "GoalImage = "+ imageBytes +" WHERE GoalRank = "+GoalRank;
         db.execSQL(SQL);
+    }
+
+    public byte[] retreiveImageFromDB() {
+        SQLiteDatabase db = this.getWritableDatabase();
+        Cursor cur = db.rawQuery("",null);
+        if (cur.moveToFirst()) {
+            byte[] blob = cur.getBlob(cur.getColumnIndex("GoalImage"));
+            cur.close();
+            return blob;
+        }
+        cur.close();
+        return null;
     }
 
     public void updateGoalRank(Integer GoalRank){
@@ -231,7 +244,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         db.execSQL(SQL);
     }
 
-    public void updateGoal(String Goal, String GoalCost, String GoalRank){
+    public void updateGoal(String Goal, String GoalCost, String GoalRank, byte[] imageBytes){
         SQLiteDatabase db = this.getWritableDatabase();
         String SQL = "UPDATE GOALS SET GoalName ='"+Goal+"',GoalCost ='"+GoalCost+"' WHERE GoalRank ="+GoalRank;
         db.execSQL(SQL);

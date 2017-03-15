@@ -58,7 +58,7 @@ public class ViewBudget extends Fragment {
 
     public void ShowCategoryList() {
         data = mydb.getListContentsCategory();
-        String[] columns = new String[]{DatabaseHelper.KEY_TASK,"Budget"};
+        String[] columns = new String[]{DatabaseHelper.KEY_TASK,"BudgetCost"};
         int[] to = new int[]{R.id.firstCategoryName, R.id.firstCategoryAmount};
 
         adapter = new SimpleCursorAdapter(getActivity(), R.layout.firstcategory_row, data, columns, to, 0);

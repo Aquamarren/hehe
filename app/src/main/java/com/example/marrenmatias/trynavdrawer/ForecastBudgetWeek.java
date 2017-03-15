@@ -63,7 +63,7 @@ public class ForecastBudgetWeek extends AppCompatActivity {
         Cursor cur = db.rawQuery("SELECT *, EXPENSE.CategoryName, " +
                 "INCOME.ID AS _id, " +
                 "EXPENSE.ID AS _id, " +
-                "ROUND((SUM(EXPENSE.ExpenseAmount)/(JulianDay('now') - JulianDay(MIN(EXPENSE.ExpenseDate)))) * 7,2) AS ExpenseForecast " +
+                "ROUND((SUM(EXPENSE.ExpenseAmount)/(JulianDay('now') - JulianDay(MIN(EXPENSE.ExpenseDate)))) * 7, 2) AS ExpenseForecast " +
                 "FROM INCOME, EXPENSE WHERE EXPENSE.ACTIVE = 1 AND INCOME.ACTIVE = 1 " +
                 "AND EXPENSE.ExpenseDate BETWEEN INCOME.IncomeDateTo AND INCOME.IncomeDateFrom " +
                 "GROUP BY EXPENSE.CategoryName ORDER BY EXPENSE.ExpenseDate DESC", null);
@@ -78,14 +78,4 @@ public class ForecastBudgetWeek extends AppCompatActivity {
     }
 }
 
-/*
-        Expense Forecast for the Next Week = ((Total Expense recorded / (Date today – Date of first Expense)) * 7)
-        1 week = 7 days
-        Total Expense = 875; Date Today = November 14, 2016;
-        Date of 1st Expense = November 01, 2016
-
-        Expense Forecast for the Next Week = ((875 / (14 - 1)) * 7)
-        Expense Forecast for the Next Week = 471.15
-        The user average expense for the next week is 471.15.
-     */
 

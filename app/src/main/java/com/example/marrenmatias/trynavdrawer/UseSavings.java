@@ -43,8 +43,8 @@ public class UseSavings extends AppCompatActivity {
         spinner = (Spinner)findViewById(R.id.spinner);
         List<String> list = new ArrayList<String>();
         list.add("Income");
-        c = db.rawQuery("SELECT GoalRank, GoalCost, GoalName FROM GOALS WHERE GoalAccomplished = 1 AND GoalName IS NOT NULL " +
-                "AND MAX(GoalRank) ORDER BY GoalRank ASC",null);
+        c = db.rawQuery("SELECT MAX(GoalRank), GoalCost, GoalName FROM GOALS WHERE GoalAccomplished = 1 AND GoalName IS NOT NULL " +
+                " ORDER BY GoalRank ASC",null);
 
         while(c.moveToNext()){
             list.add("Goal " + c.getString(0) + " - " + c.getString(2));
